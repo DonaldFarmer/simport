@@ -17,20 +17,15 @@ login
 navigate to import page
 """
 isAbort = False
+
 try:
   with open('config.json') as json_data_file:
     config = json.load(json_data_file)
 except:
-  print('no config.json found, use config.sample_json as a template')
+  print('No config.json found, use config.sample_json as a template')
   isAbort = True
 
 
-# url_prod = "https://sandbox-joule.myshopify.com/admin/products"
-# url_lang = "https://sandbox-joule.myshopify.com/admin/apps"
-# username = "don.farmer@cma.ca"
-# password = ""
-# filepath_prod = "/home/donald/Documents/product_template.csv"
-# filepath_lang = "/home/donald/Documents/lang.csv"
 
 def init_driver():
     driver = webdriver.Firefox()

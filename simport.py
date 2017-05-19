@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 import time
+import json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -15,13 +16,21 @@ configure
 login
 navigate to import page
 """
+isAbort = False
+try:
+  with open('config.json') as json_data_file:
+    config = json.load(json_data_file)
+except:
+  print('no config.json found, use config.sample_json as a template')
+  isAbort = True
 
-url_prod = "https://sandbox-joule.myshopify.com/admin/products"
-url_lang = "https://sandbox-joule.myshopify.com/admin/apps"
-username = "don.farmer@cma.ca"
-password = ""
-filepath_prod = "/home/donald/Documents/product_template.csv"
-filepath_lang = "/home/donald/Documents/lang.csv"
+
+# url_prod = "https://sandbox-joule.myshopify.com/admin/products"
+# url_lang = "https://sandbox-joule.myshopify.com/admin/apps"
+# username = "don.farmer@cma.ca"
+# password = ""
+# filepath_prod = "/home/donald/Documents/product_template.csv"
+# filepath_lang = "/home/donald/Documents/lang.csv"
 
 def init_driver():
     driver = webdriver.Firefox()
@@ -33,7 +42,7 @@ def checkfile(): # check and see if a valid file exists at upload location
   pass
 
 
-def open(driver, uri): # navigates to webpage
+def openselenium(driver, uri): # navigates to webpage
   driver.get(uri)
 
 
@@ -72,31 +81,31 @@ def navigate(driver, val):
   driver.url(val)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and  not isAbort:
   driver = init_driver()
+  print(config['username'])
+  # openselenium(driver, url_prod)
+  # WebDriverWait(driver, 5)
 
-  open(driver, url_prod)
-  WebDriverWait(driver, 5)
 
-
-  type(driver, "id", "login-input", username)
-  type(driver, "id", password, "")
-  type(driver, "class", "dialog-btn", Keys.RETURN)
-  WebDriverWait(driver, 3)
+  # type(driver, "id", "login-input", config['username'])
+  # type(driver, "id", config['password'], "")
+  # type(driver, "class", "dialog-btn", Keys.RETURN)
+  # WebDriverWait(driver, 3)
 
   # navigate(driver, "https://sandbox-joule.myshopify.com/admin/products") # s/b on this page now
 
-  click(driver, "linktext","Products")
-  WebDriverWait(driver, 2)
-  click(driver, "linktext", "Import")
+  # click(driver, "linktext","Products")
+  # WebDriverWait(driver, 2)
+  # click(driver, "linktext", "Import")
 
-  click(driver, "id", "overwrite_existing_products")
-  type(driver, "id", "csv_input_field", filepath_prod")
-  click(driver, "id","upload-file-btn")
+  # click(driver, "id", "overwrite_existing_products")
+  # type(driver, "id", "csv_input_field", config['filepath_prod'])
+  # click(driver, "id","upload-file-btn")
 
 
   # need to wait until previous upload is finished
-  # navigate(driver, url_lang) 
+  # navigate(driver, config['url_lang']) 
   # click(driver, "link", "langify")
   # click(driver, "link", "Français")
   # clickandwait(driver, "link", "Import translations...")
@@ -111,7 +120,7 @@ if __name__ == "__main__":
   # click(driver, "link", "import-step-2-next")
   # click(driver, "link", "import-step-3-next")
   # click(driver, "link", "form_import_csv")
-  # #type(driver, "id", "csv_input_field", filepath_lang)
+  # #type(driver, "id", "csv_input_field", config['filepath_lang'])
   # #click(driver, "id","upload-file-btn")
 
   #time.sleep(5)

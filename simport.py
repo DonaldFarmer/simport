@@ -75,12 +75,12 @@ def navigate(driver, val):
 if __name__ == "__main__":
   driver = init_driver()
 
-  open(driver, "https://sandbox-joule.myshopify.com/admin/auth/login")
+  open(driver, url_prod)
   WebDriverWait(driver, 5)
 
 
-  type(driver, "id", "login-input", "don.farmer@cma.ca")
-  type(driver, "id", "password", "")
+  type(driver, "id", "login-input", username)
+  type(driver, "id", password, "")
   type(driver, "class", "dialog-btn", Keys.RETURN)
   WebDriverWait(driver, 3)
 
@@ -91,12 +91,12 @@ if __name__ == "__main__":
   click(driver, "linktext", "Import")
 
   click(driver, "id", "overwrite_existing_products")
-  type(driver, "id", "csv_input_field", "/home/donald/Documents/product_template.csv")
+  type(driver, "id", "csv_input_field", filepath_prod")
   click(driver, "id","upload-file-btn")
 
 
   # need to wait until previous upload is finished
-  # navigate(driver, "https://sandbox-joule.myshopify.com/admin/apps") 
+  # navigate(driver, url_lang) 
   # click(driver, "link", "langify")
   # click(driver, "link", "Français")
   # clickandwait(driver, "link", "Import translations...")
@@ -111,7 +111,7 @@ if __name__ == "__main__":
   # click(driver, "link", "import-step-2-next")
   # click(driver, "link", "import-step-3-next")
   # click(driver, "link", "form_import_csv")
-  # #type(driver, "id", "csv_input_field", "/home/donald/Documents/lang.csv")
+  # #type(driver, "id", "csv_input_field", filepath_lang)
   # #click(driver, "id","upload-file-btn")
 
   #time.sleep(5)

@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from ftplib import FTP
 
 """
 import a new product csv file
@@ -25,6 +26,20 @@ except:
   print('No config.json found, use config.sample_json as a template')
   isAbort = True
 
+
+def RetrieveFTPFile(ftpdir, ftpfile, ftpsavefile):
+  ftp = FTP(config['ftp_url'])
+  ftp.getwelcome()
+  ftp.login(config['ftp_username'],config['ftp_password'])
+
+  ftp.cwd(ftpdir)
+  print('Files found on FTP site in directory', ftpdir)
+  ftp.retrlines('LIST')
+  ftpfilecmd = 'RETR ' + ftpfile
+  print ftpfilecmd, ftpsavefile
+  ftp.retrbinary(ftpfilecmd, open(ftpsavefile, 'wb').write)
+
+  ftp.quit()
 
 
 def init_driver():
@@ -57,19 +72,19 @@ def clickandwait():
   pass
 
 
-def click(driver, type, value):
+def click(driver, type, val):
   if type == "id":
-    elem = driver.find_element_by_id(value) 
+    elem = driver.find_element_by_id(val) 
   elif type == "name":
-    elem = driver.find_element_by_name(value) 
+    elem = driver.find_element_by_name(val) 
   elif type == "xpath":
-    elem = driver.find_element_by_xpath(value) 
+    elem = driver.find_element_by_xpath(val) 
   elif type == "linktxt":
-    elem = driver.find_element_by_link_text(value)
+    elem = driver.find_element_by_link_text(val)
   try:
     elem.click()
   except:
-    print('unable to click {0} {1}'.format(type, value))
+    print('unable to click {0} {1}'.format(type, val))
 
 
 def navigate(driver, val):
@@ -77,8 +92,11 @@ def navigate(driver, val):
 
 
 if __name__ == "__main__" and  not isAbort:
-  driver = init_driver()
+  # driver = init_driver()
   print(config['username'])
+
+  RetrieveFTPFile(config['ftp_dir_prod'], config['ftp_file_prod'], config['filepath_prod'])
+
   # openselenium(driver, url_prod)
   # WebDriverWait(driver, 5)
 

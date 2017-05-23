@@ -5,5 +5,12 @@
     "username":"don.farmer@cma.ca",
     "password":"",
     "filepath_prod":"/home/donald/Documents/product_template.csv",
-    "filepath_lang":"/home/donald/Documents/lang.csv"
+    "filepath_lang":"/home/donald/Documents/lang.csv",
+    "ftp_url":"novateric.com",
+    "ftp_dir_prod":"donfarmer",
+    "ftp_dir_lang":"donfarmer",
+    "ftp_file_prod":"product_template.csv",
+    "ftp_file_lang":"product_template.csv",
+    "ftp_username": "Administrator",
+    "ftp_password":""
 }

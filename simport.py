@@ -41,6 +41,11 @@ def RetrieveFTPFile(ftpdir, ftpfile, ftpsavefile):
 
   ftp.quit()
 
+def unzipper():
+  import zipfile
+  with zipfile.ZipFile("file.zip","r") as zip_ref:
+    zip_ref.extractall("targetdir")
+
 
 def init_driver():
     driver = webdriver.Firefox()
@@ -118,7 +123,7 @@ if __name__ == "__main__" and  not isAbort:
 
 
   # need to wait until previous upload is finished
-  # navigate(driver, config['url_lang']) 
+  # navigate(driver, config['url_lang'])
   # click(driver, "link", "langify")
   # click(driver, "link", "Français")
   # clickandwait(driver, "link", "Import translations...")

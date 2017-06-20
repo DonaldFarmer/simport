@@ -12,6 +12,7 @@ from ftplib import FTP
 import paramiko
 import zipfile
 import sys
+# import pywinauto
 
 """
 
@@ -23,7 +24,7 @@ isReuse = False
 isLogin = False
 isCookies = False
 isProducts = False
-isLang = True
+isLang = False
 
 try:
   with open('config.json') as json_data_file:
@@ -241,6 +242,16 @@ def setSession():
     return true
 
 
+# def Test(Name_of_File):
+#     app = pywinauto.application.Application()
+#     mainWindow = app[''] # main windows' title
+#     ctrl=mainWindow['Edit'] 
+#     mainWindow.SetFocus()
+#     ctrl.ClickInput()
+#     ctrl.TypeKeys(Name_of_File)
+#     ctrlBis = mainWindow['Open'] # open file button
+#     ctrlBis.ClickInput()
+
 #############################################################################
 
 if __name__ == "__main__" and  not isAbort:
@@ -295,7 +306,7 @@ if __name__ == "__main__" and  not isAbort:
 
 
   ### Normal shopify login if not logged in at this point
-  if not isLoggedin and not isAbort:
+  if not isLoggedin and not isAbort and (isLang or isProducts):
     click(driver, "css", "button.login-form__link")
     WebDriverWait(driver, 50)
     if config['url_isproduction']:
@@ -393,7 +404,7 @@ if __name__ == "__main__" and  not isAbort:
 
    
     import pdb; pdb.set_trace()
-    
+
     click(driver, "id", "form_import_csv")
     sleep(3)
 

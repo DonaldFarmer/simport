@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
-import time
+from time import sleep
 import json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -244,21 +244,7 @@ def setSession():
 #############################################################################
 
 if __name__ == "__main__" and  not isAbort:
-  print config['url_isproduction']
-  if config['url_isproduction']:
-    url_products = 'https://.myshopify.com/admin/products'
-  else:
-    url_products = 'https://sandbox-joule.myshopify.com/admin/products'
-  print url_products
-
-  if config['url_isproduction']:
-      subdomain = "cma-joule-inc"
-  else:
-      subdomain = "sandbox-joule"  
-  print subdomain    
   
-
-
   ### Open the Firefox browser and start a new session
   driver = init_driver()
 
@@ -311,19 +297,33 @@ if __name__ == "__main__" and  not isAbort:
   ### Normal shopify login if not logged in at this point
   if not isLoggedin and not isAbort:
     click(driver, "css", "button.login-form__link")
-    WebDriverWait(driver, 2)
+    WebDriverWait(driver, 50)
     if config['url_isproduction']:
       subdomain = "cma-joule-inc"
     else:
       subdomain = "sandbox-joule"
     type(driver, "id", "_subdomain", subdomain) #cma-joule-inc or sandbox-joule
+    sleep(3)
     type(driver, "id", "_email", config['username'])
+    sleep(3)
     type(driver, "id", "_password", config['password'])
+    sleep(3)
+
     click(driver, "class", "marketing-button")
-    WebDriverWait(driver, 2)
+    sleep(3)
+    # navigate(driver, 'https://sandbox-joule.myshopify.com/admin')
+    # time.sleep(3)  
+
+  main_window = driver.current_window_handle
+  # import pdb; pdb.set_trace()
 
 
   ### Navigating to the product import page and get the product import popup
+
+  if config['url_isproduction']:
+    url_products = 'https://sandbox-joule.myshopify.com/admin/products'
+  else:
+    url_products = 'https://sandbox-joule.myshopify.com/admin/products'
 
 
   if isProducts and not isAbort:
@@ -331,6 +331,7 @@ if __name__ == "__main__" and  not isAbort:
       url_products = 'https://sandbox-joule.myshopify.com/admin/products'
     else:
       url_products = 'https://sandbox-joule.myshopify.com/admin/products'
+
     navigate(driver, url_products)    ### Select the products import
     click(driver, "css", 'div.action-bar__top-links button+button')
 
@@ -343,11 +344,58 @@ if __name__ == "__main__" and  not isAbort:
 
 
   if isLang and not isAbort:
-    # navigate(driver, 'http://langify-app.com/settings/language/edit/17818')
-    import pdb; pdb.set_trace()
-    navigate(driver, 'http://langify-app.com/import/translations')
+    if config['url_isproduction']:
+      url_lang = 'https://sandbox-joule.myshopify.com/admin/apps'
+    else:
+      url_lang = 'https://sandbox-joule.myshopify.com/admin/apps'
 
-    click(driver, "link", "form_import_csv")
+    navigate(driver, url_lang) 
+    sleep(3)
+
+    
+
+    click(driver, "linktxt", "langify") # opens another tab
+    sleep(3)
+    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.TAB)
+    driver.switch_to_window(main_window)
+    sleep(2)
+
+    navigate(driver, 'http://langify-app.com/') # ignore open tab but navigate with first tab
+    sleep(3)
+    
+    
+    # navigate(driver, 'http://langify-app.com/settings/language/edit/17818')
+    
+    # navigate(driver, 'http://langify-app.com/import/translations')
+    # WebDriverWait(driver, 5)
+
+
+    click(driver, 'css', 'ul.nav li a')
+    sleep(1)
+    click(driver, 'css', 'li.dropdown ul.dropdown-menu li+li+li a')
+
+    # click(driver, "css", 'div.language-selection a')
+    sleep(3)
+
+    
+
+    click(driver, "id", "import-intro-next")
+    sleep(3)
+
+    click(driver, "id", "import-step-1-next")
+    sleep(3)
+
+    click(driver, "id", "import-step-2-next")
+    sleep(3)
+
+    click(driver, "id", "import-step-3-next")
+    sleep(3)
+
+   
+    import pdb; pdb.set_trace()
+    
+    click(driver, "id", "form_import_csv")
+    sleep(3)
 
     type(driver, "id", "csv_input_field", config['filepath_lang'])
     click(driver, "id","upload-file-btn")

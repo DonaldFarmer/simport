@@ -276,7 +276,7 @@ def setSession():
 if __name__ == "__main__" and  not isAbort:
   
   ### Open the Firefox browser and start a new session
-  if not (isLang or isProducts):
+  if  (isLang or isProducts):
     driver = init_driver()
 
   ### visit the FTP to see if we have files to process
@@ -288,7 +288,7 @@ if __name__ == "__main__" and  not isAbort:
 
 
   ### Visit the shopify login page
-  if not (isLang or isProducts):
+  if  (isLang or isProducts):
     openselenium(driver, config['url_prod'])
     WebDriverWait(driver, 5)
 
@@ -346,7 +346,8 @@ if __name__ == "__main__" and  not isAbort:
     # navigate(driver, 'https://sandbox-joule.myshopify.com/admin')
     # time.sleep(3)  
 
-  main_window = driver.current_window_handle
+  if  (isLang or isProducts):
+      main_window = driver.current_window_handle
   # import pdb; pdb.set_trace()
 
 

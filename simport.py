@@ -83,7 +83,7 @@ def RetrieveFTPSFile(ftpdir, ftpfile, ftpsavefile):
   sftp.get(newest_cat, newest_cat)
   print 'Download catalog file completed. ', newest_cat
   sftp.get(newest_lang, newest_lang)
-  print 'Download lang file completed. ', newest_cat
+  print 'Download lang file completed. ', newest_lang
 
   sftp.close()
   transport.close()
@@ -366,14 +366,18 @@ if __name__ == "__main__" and  not isAbort:
       url_products = 'https://sandbox-joule.myshopify.com/admin/products'
 
     navigate(driver, url_products)    ### Select the products import
+    sleep(2)
     click(driver, "css", 'div.action-bar__top-links button+button')
-
+    sleep(2)
     ### Requesting the import and specifying the file to use
     click(driver, "id", "overwrite_existing_products")
+    print 'using file ', config['filepath_prod']
+    sleep(1)
     type(driver, "id", "csv_input_field", config['filepath_prod'])
+    sleep(1)
     click(driver, "id","upload-file-btn")
     WebDriverWait(driver, 50)
-
+    sleep(15)
 
 
   if isLang and not isAbort:
@@ -390,6 +394,7 @@ if __name__ == "__main__" and  not isAbort:
     click(driver, "linktxt", "langify") # opens another tab
     sleep(3)
     driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.TAB)
+    sleep(1)
     driver.switch_to_window(main_window)
     sleep(2)
 

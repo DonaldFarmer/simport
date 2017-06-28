@@ -318,8 +318,8 @@ if __name__ == "__main__" and  not isAbort:
     # saveCookiesToFile()
     print 'saving running session, do not close running tab'
     saveSessionToFile()
-  else:
-    print 'Skipping login'
+  # else:
+    # print 'Skipping login'
 
   ### Connect to existing session if requested
   if isReuse:
@@ -430,13 +430,14 @@ if __name__ == "__main__" and  not isAbort:
     sleep(3)
 
    
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     click(driver, "id", "form_import_csv")
     sleep(3)
-
-    type(driver, "id", "csv_input_field", config['filepath_lang'])
-    click(driver, "id","upload-file-btn")
+    os.system("'c:\\simport\\script.exe'")
+    # type(driver, "id", "csv_input_field", config['filepath_lang'])
+    print 'using file ', config['filepath_lang']
+    # click(driver, "id","upload-file-btn")
 
   #time.sleep(5)
   #driver.quit()

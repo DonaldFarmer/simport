@@ -12,6 +12,7 @@ from ftplib import FTP
 import paramiko
 import zipfile
 import sys
+import os
 # import pywinauto
 
 """
@@ -36,7 +37,7 @@ except:
 for para in sys.argv:
   # print para
   if para.lower() == 'ftp':
-    isNoFtp = True
+    isFtp = True
   elif para.lower() == 'reuse':
     isReuse = True
   elif para.lower() == 'login':
@@ -53,29 +54,47 @@ def RetrieveFTPSFile(ftpdir, ftpfile, ftpsavefile):
   transport = paramiko.Transport((config['ftp_url'], config['ftp_port']))
   transport.connect(username = config['ftp_username'], password = config['ftp_password'])
   sftp = paramiko.SFTPClient.from_transport(transport)
+  sftp.chdir(ftpdir)
 
   files = sftp.listdir()
   files.sort()
   files.reverse()
-  newest = files[0][1]
-  
-  extension = os.path.splitext(f)[1][1:].strip()
-  if extension.lower() == 'zip':
-    print newest, 'a zip file', extension
 
-  ftpsourcefile = ftpdir + '/' + ftpfile
-  print ftpsourcefile
+  cats = [elem for elem in files if 'catalog_20' in elem]
+  langs = [elem for elem in files if 'french_' in elem]
+
+  newest_cat = cats[-1]
+  newest_lang = langs[-1]
+
+  extension_cat = os.path.splitext(newest_cat)[1][1:].strip()
+  if extension_cat.lower() == 'zip':
+    print newest_cat, ' is a zip file', extension_cat
+
+  extension_lang = os.path.splitext(newest_lang)[1][1:].strip()
+  if extension_lang.lower() == 'zip':
+    print newest_lang, ' is a zip file', extension_lang
+
+  # ftpsourcefile = ftpdir + '/' + ftpfile
+  # print ftpsourcefile
+  # print newest
   localzipfile = 'ziptemp.zip'
 
-  sftp.get(ftpsourcefile, localzipfile)
+  # sftp.get(ftpsourcefile, localzipfile)
+  sftp.get(newest_cat, newest_cat)
+  print 'Download catalog file completed. ', newest_cat
+  sftp.get(newest_lang, newest_lang)
+  print 'Download lang file completed. ', newest_cat
+
   sftp.close()
   transport.close()
-  print 'Upload done.'
 
-  if extension.lower() == 'zip':
-    unzipper(localzipfile, ftpsavefile)
+  if extension_cat.lower() == 'zip':
+    unzipper(newest_cat, ftpsavefile)
     print 'Unzip done.', ftpsavefile, ' created'
 
+  if extension_lang.lower() == 'zip':
+    unzipper(newest_lang, ftpsavefile)
+    print 'Unzip done.', ftpsavefile, ' created'
 
 
 def RetrieveFTPFile(ftpdir, ftpfile, ftpsavefile):
@@ -257,7 +276,8 @@ def setSession():
 if __name__ == "__main__" and  not isAbort:
   
   ### Open the Firefox browser and start a new session
-  driver = init_driver()
+  if not (isLang or isProducts):
+    driver = init_driver()
 
   ### visit the FTP to see if we have files to process
   if isFtp:
@@ -268,8 +288,9 @@ if __name__ == "__main__" and  not isAbort:
 
 
   ### Visit the shopify login page
-  openselenium(driver, config['url_prod'])
-  WebDriverWait(driver, 5)
+  if not (isLang or isProducts):
+    openselenium(driver, config['url_prod'])
+    WebDriverWait(driver, 5)
 
   ### replace session cookies from previous saved login session if requested
   if isLoggedin == False and isCookies:
